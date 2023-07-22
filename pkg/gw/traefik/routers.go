@@ -26,7 +26,7 @@ func (tc *TraefikClient) AddRoute(ctx context.Context, info any) error {
 	if err != nil {
 		return err
 	}
-	err = etcd.PutWithKV(ctx, routerInfo.endpoints, fmt.Sprintf("traefik/http/routers/%s/service", routerInfo.Server), routerInfo.Server)
+	err = etcd.PutWithKV(ctx, routerInfo.endpoints, fmt.Sprintf("traefik/http/routers/%s/server", routerInfo.Server), routerInfo.Server)
 	if err != nil {
 		return err
 	}
