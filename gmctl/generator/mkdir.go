@@ -13,6 +13,7 @@ const (
 	etc      = "etc"
 	internal = "internal"
 	config   = "config"
+	errno    = "errno"
 	handler  = "handler"
 	service  = "server"
 	svc      = "svc"
@@ -25,6 +26,7 @@ type (
 		GetEtc() Dir
 		GetInternal() Dir
 		GetConfig() Dir
+		GetErrno() Dir
 		GetHandler() Dir
 		GetService() Dir
 		GetSvc() Dir
@@ -53,6 +55,7 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 	etcDir := filepath.Join(ctx.WorkDir, "etc")
 	internalDir := filepath.Join(ctx.WorkDir, "internal")
 	configDir := filepath.Join(internalDir, "config")
+	errnoDir := filepath.Join(internalDir, "errno")
 	handlerDir := filepath.Join(internalDir, "handler")
 	serviceDir := filepath.Join(internalDir, "service")
 	svcDir := filepath.Join(internalDir, "svc")
@@ -85,6 +88,11 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 		Filename: configDir,
 		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(configDir, ctx.Dir))),
 		Base:     filepath.Base(configDir),
+	}
+	inner[errno] = Dir{
+		Filename: errnoDir,
+		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(errnoDir, ctx.Dir))),
+		Base:     filepath.Base(errnoDir),
 	}
 	inner[handler] = Dir{
 		Filename: handlerDir,
@@ -132,6 +140,10 @@ func (d *defaultDirContext) GetInternal() Dir {
 
 func (d *defaultDirContext) GetConfig() Dir {
 	return d.inner[config]
+}
+
+func (d *defaultDirContext) GetErrno() Dir {
+	return d.inner[errno]
 }
 
 func (d *defaultDirContext) GetHandler() Dir {

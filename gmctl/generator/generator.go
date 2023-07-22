@@ -40,10 +40,10 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
-	err = g.GenGoMod(gctx, abs)
-	if err != nil {
-		return err
-	}
+	//err = g.GenGoMod(gctx, abs)
+	//if err != nil {
+	//	return err
+	//}
 
 	projectCtx, err := ctx.Prepare(abs)
 	if err != nil {
@@ -52,11 +52,11 @@ func (g *Generator) Generate(gctx *GmContext) error {
 
 	dirCtx, err := mkdir(projectCtx, proto, gctx)
 	// 开始生成文件
-
-	err = g.GenProto(dirCtx, proto)
+	err = g.GenErrno(dirCtx, proto)
 	if err != nil {
 		return err
 	}
+
 	err = g.GenHandler(dirCtx, proto, gctx)
 	if err != nil {
 		return err

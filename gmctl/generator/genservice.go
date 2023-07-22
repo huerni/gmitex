@@ -42,7 +42,7 @@ func (g *Generator) GenServiceInCompatibility(ctx DirContext, proto parser.Proto
 			"functions":   functions,
 			"packageName": "service",
 			"imports":     strings.Join(imports.KeysStr(), pathx.NL),
-		}, filename, false)
+		}, filename, true)
 		if err != nil {
 			return err
 		}
