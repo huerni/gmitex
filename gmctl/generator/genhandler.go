@@ -46,7 +46,7 @@ func (g *Generator) genHandlerInCompatibility(ctx DirContext, proto parser.Proto
 			break
 		}
 	}
-	return util.With("server").GoFmt(true).Parse(handlerTemplate).SaveTo(map[string]any{
+	return util.With("handler").GoFmt(true).Parse(handlerTemplate).SaveTo(map[string]any{
 		"head":    "// no edit",
 		"imports": strings.Join(imports.KeysStr(), pathx.NL),
 		"unimplementedServer": fmt.Sprintf("%s.Unimplemented%sServer", proto.PbPackage,

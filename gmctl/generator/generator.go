@@ -62,6 +62,11 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
+	err = g.GenRouter(dirCtx, proto)
+	if err != nil {
+		return err
+	}
+
 	err = g.GenService(dirCtx, proto)
 	if err != nil {
 		return err

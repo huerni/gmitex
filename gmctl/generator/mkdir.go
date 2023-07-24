@@ -15,6 +15,7 @@ const (
 	config   = "config"
 	errno    = "errno"
 	handler  = "handler"
+	router   = "router"
 	service  = "server"
 	svc      = "svc"
 	pb       = "pb"
@@ -28,6 +29,7 @@ type (
 		GetConfig() Dir
 		GetErrno() Dir
 		GetHandler() Dir
+		GetRouter() Dir
 		GetService() Dir
 		GetSvc() Dir
 		GetPb() Dir
@@ -57,6 +59,7 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 	configDir := filepath.Join(internalDir, "config")
 	errnoDir := filepath.Join(internalDir, "errno")
 	handlerDir := filepath.Join(internalDir, "handler")
+	routerDir := filepath.Join(internalDir, "router")
 	serviceDir := filepath.Join(internalDir, "service")
 	svcDir := filepath.Join(internalDir, "svc")
 	pbDir := filepath.Join(ctx.WorkDir, "pb")
@@ -98,6 +101,11 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 		Filename: handlerDir,
 		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(handlerDir, ctx.Dir))),
 		Base:     filepath.Base(handlerDir),
+	}
+	inner[router] = Dir{
+		Filename: routerDir,
+		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(routerDir, ctx.Dir))),
+		Base:     filepath.Base(routerDir),
 	}
 	inner[service] = Dir{
 		Filename: serviceDir,
@@ -148,6 +156,10 @@ func (d *defaultDirContext) GetErrno() Dir {
 
 func (d *defaultDirContext) GetHandler() Dir {
 	return d.inner[handler]
+}
+
+func (d *defaultDirContext) GetRouter() Dir {
+	return d.inner[router]
 }
 
 func (d *defaultDirContext) GetService() Dir {

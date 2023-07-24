@@ -32,7 +32,7 @@ func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (*cli
 	}
 
 	kv := clientv3.NewKV(cli)
-	getResp, err := kv.Get(context.TODO(), prefix, clientv3.WithPrefix())
+	getResp, err := kv.Get(ctx, prefix, clientv3.WithPrefix())
 
 	return getResp, nil
 }
