@@ -75,6 +75,7 @@ func (g *Generator) genFunctions(goPackage string, service parser.Service) ([]st
 			"serverName":  stringx.From(service.Name).ToCamel(),
 			"serviceName": rpc.Name,
 			"method":      parser.CamelCase(rpc.Name),
+			"path":        rpc.RPC.Options[0].AggregatedConstants[0].Literal.Source,
 			"request":     fmt.Sprintf("*%s.%s", goPackage, parser.CamelCase(rpc.RequestType)),
 			"response":    fmt.Sprintf("*%s.%s", goPackage, parser.CamelCase(rpc.ReturnsType)),
 			"hasComment":  len(comment) > 0,
