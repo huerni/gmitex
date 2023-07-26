@@ -12,7 +12,9 @@ const (
 	cmd      = "cmd"
 	etc      = "etc"
 	internal = "internal"
+	app      = "app"
 	config   = "config"
+	db       = "db"
 	errno    = "errno"
 	handler  = "handler"
 	router   = "router"
@@ -26,7 +28,9 @@ type (
 	DirContext interface {
 		GetEtc() Dir
 		GetInternal() Dir
+		GetApp() Dir
 		GetConfig() Dir
+		GetDb() Dir
 		GetErrno() Dir
 		GetHandler() Dir
 		GetRouter() Dir
@@ -56,7 +60,9 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 	inner := make(map[string]Dir)
 	etcDir := filepath.Join(ctx.WorkDir, "etc")
 	internalDir := filepath.Join(ctx.WorkDir, "internal")
+	appDir := filepath.Join(internalDir, "app")
 	configDir := filepath.Join(internalDir, "config")
+	dbDir := filepath.Join(internalDir, "db")
 	errnoDir := filepath.Join(internalDir, "errno")
 	handlerDir := filepath.Join(internalDir, "handler")
 	routerDir := filepath.Join(internalDir, "router")
@@ -87,10 +93,20 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, gctx *GmContext) (DirCon
 			strings.TrimPrefix(internalDir, ctx.Dir))),
 		Base: filepath.Base(internalDir),
 	}
+	inner[app] = Dir{
+		Filename: appDir,
+		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(appDir, ctx.Dir))),
+		Base:     filepath.Base(appDir),
+	}
 	inner[config] = Dir{
 		Filename: configDir,
 		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(configDir, ctx.Dir))),
 		Base:     filepath.Base(configDir),
+	}
+	inner[db] = Dir{
+		Filename: dbDir,
+		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(dbDir, ctx.Dir))),
+		Base:     filepath.Base(dbDir),
 	}
 	inner[errno] = Dir{
 		Filename: errnoDir,
@@ -146,8 +162,16 @@ func (d *defaultDirContext) GetInternal() Dir {
 	return d.inner[internal]
 }
 
+func (d *defaultDirContext) GetApp() Dir {
+	return d.inner[app]
+}
+
 func (d *defaultDirContext) GetConfig() Dir {
 	return d.inner[config]
+}
+
+func (d *defaultDirContext) GetDb() Dir {
+	return d.inner[db]
 }
 
 func (d *defaultDirContext) GetErrno() Dir {
