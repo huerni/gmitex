@@ -19,7 +19,7 @@ type ServerInfo struct {
 	Data      map[string]string
 }
 
-func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (*clientv3.GetResponse, error) {
+func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (map[string]string, error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   endpoints,
 		DialTimeout: 5 * time.Second,
@@ -32,9 +32,15 @@ func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (*cli
 	}
 
 	kv := clientv3.NewKV(cli)
-	getResp, err := kv.Get(context.TODO(), prefix, clientv3.WithPrefix())
-
-	return getResp, nil
+	getResp, err := kv.Get(ctx, prefix, clientv3.WithPrefix())
+	if err != nil {
+		return nil, err
+	}
+	result, err := stringToMap(string(getResp.Kvs[0].Value))
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func PutWithKV(ctx context.Context, endpoints []string, key string, val string) error {
@@ -57,12 +63,12 @@ func PutWithKV(ctx context.Context, endpoints []string, key string, val string) 
 	keepAlive, err := cli.KeepAlive(ctx, resp.ID)
 	go func() {
 		// eat keepAlive channel to keep related lease alive.
-		fmt.Printf("start keepalive lease %x for etcd registry\n", resp.ID)
+		fmt.Printf("start keepalive key %s for etcd registry\n", key)
 		for range keepAlive {
 			select {
 			case <-ctx.Done():
 				cli.Close()
-				fmt.Printf("stop keepalive lease %x for etcd registry\n", resp.ID)
+				fmt.Printf("stop keepalive key %s for etcd registry\n", key)
 				return
 			default:
 			}
@@ -80,4 +86,14 @@ func PutWithInfo(ctx context.Context, endpoints []string, info *ServerInfo) erro
 	}
 
 	return PutWithKV(ctx, endpoints, info.ServerKey, string(val))
+}
+
+// stringToMap 将map格式的字符串解析为map类型
+func stringToMap(s string) (map[string]string, error) {
+	var m map[string]string
+	err := json.Unmarshal([]byte(s), &m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }

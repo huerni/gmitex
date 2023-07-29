@@ -16,7 +16,7 @@ type ErrResponse struct {
 }
 
 // 封转成HTTP Err格式
-func errorHandler(ctx context.Context, mux *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
+func ErrorHandler(ctx context.Context, mux *runtime.ServeMux, marshaler runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
 	const fallback = `{"error": "failed to marshal error message"}`
 	s, ok := status.FromError(err)
 	if !ok {
