@@ -24,7 +24,8 @@ func (g *Generator) GenGrpcServer(ctx DirContext, proto parser.Proto) error {
 	configImport := fmt.Sprintf(`"%v"`, ctx.GetConfig().Package)
 	handlerImport := fmt.Sprintf(`"%v"`, ctx.GetHandler().Package)
 	svcImport := fmt.Sprintf(`"%v"`, ctx.GetSvc().Package)
-	imports.AddStr(configImport, handlerImport, svcImport)
+	pbImport := fmt.Sprintf(`"%v"`, ctx.GetPb().Package)
+	imports.AddStr(configImport, handlerImport, svcImport, pbImport)
 
 	return util.With("grpcServer").GoFmt(true).Parse(grpcServerTemplate).SaveTo(map[string]any{
 		"imports":    strings.Join(imports.KeysStr(), pathx.NL),

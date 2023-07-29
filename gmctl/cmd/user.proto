@@ -2,7 +2,7 @@ syntax = "proto3";
 option go_package = "./pb";
 package ping;
 
-import "google/api/annotations.proto";
+import "google/api/annotations.tpl";
 
 message PingReq {
       string ping = 1;

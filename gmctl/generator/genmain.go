@@ -21,7 +21,8 @@ func (g *Generator) GenMain(ctx DirContext, proto parser.Proto) error {
 
 	imports := collection.NewSet()
 	configImport := fmt.Sprintf(`"%v"`, ctx.GetConfig().Package)
-	imports.AddStr(configImport)
+	appImport := fmt.Sprintf(`"%v"`, ctx.GetApp().Package)
+	imports.AddStr(configImport, appImport)
 
 	return util.With("main").GoFmt(true).Parse(mainTemplate).SaveTo(map[string]any{
 		"imports": strings.Join(imports.KeysStr(), pathx.NL),
