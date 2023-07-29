@@ -57,7 +57,32 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
+	err = g.GenHttpServer(dirCtx, proto)
+	if err != nil {
+		return err
+	}
+
+	err = g.GenGrpcServer(dirCtx, proto)
+	if err != nil {
+		return err
+	}
+
+	err = g.GenGmServer(dirCtx, proto)
+	if err != nil {
+		return err
+	}
+
+	err = g.GenDb(dirCtx, proto)
+	if err != nil {
+		return err
+	}
+
 	err = g.GenHandler(dirCtx, proto, gctx)
+	if err != nil {
+		return err
+	}
+
+	err = g.GenRouter(dirCtx, proto)
 	if err != nil {
 		return err
 	}

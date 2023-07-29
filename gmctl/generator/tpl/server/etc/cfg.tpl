@@ -1,4 +1,4 @@
-prefix = "gmitex-"
+prefix = "gmitex"
 
 [grpc]
 name = "{{.serverName}}"

@@ -6,7 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/discov"
 	"github.com/zeromicro/go-zero/zrpc"
-	"project1/pkg/etcd"
+	"github.com/huerni/gmitex/pkg/etcd"
 	"strings"
 )
 

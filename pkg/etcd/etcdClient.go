@@ -33,6 +33,7 @@ func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (map[
 
 	kv := clientv3.NewKV(cli)
 	getResp, err := kv.Get(ctx, prefix, clientv3.WithPrefix())
+
 	if err != nil {
 		return nil, err
 	}
@@ -41,6 +42,7 @@ func GetWithPrefix(ctx context.Context, endpoints []string, prefix string) (map[
 		return nil, err
 	}
 	return result, nil
+
 }
 
 func PutWithKV(ctx context.Context, endpoints []string, key string, val string) error {
