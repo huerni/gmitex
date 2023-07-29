@@ -3,7 +3,7 @@ package traefik
 import (
 	"context"
 	"fmt"
-	"project1/pkg/etcd"
+	"github.com/huerni/gmitex/pkg/etcd"
 )
 
 type TraefikClient struct {

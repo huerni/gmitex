@@ -3,11 +3,11 @@ package handlers
 import (
 	"context"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/huerni/gmitex/pkg/errno"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
 	"io"
 	"net/http"
-	"project1/pkg/errno"
 )
 
 type ErrResponse struct {
