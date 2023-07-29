@@ -6,6 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/collection"
 	"github.com/zeromicro/go-zero/tools/goctl/util"
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
+	"github.com/zeromicro/go-zero/tools/goctl/util/stringx"
 	"gmctl/parser"
 	"path/filepath"
 	"strings"
@@ -26,6 +27,7 @@ func (g *Generator) GenGrpcServer(ctx DirContext, proto parser.Proto) error {
 	imports.AddStr(configImport, handlerImport, svcImport)
 
 	return util.With("grpcServer").GoFmt(true).Parse(grpcServerTemplate).SaveTo(map[string]any{
-		"imports": strings.Join(imports.KeysStr(), pathx.NL),
+		"imports":    strings.Join(imports.KeysStr(), pathx.NL),
+		"serverName": stringx.From(ctx.GetServerName()).ToCamel(),
 	}, fileName, false)
 }

@@ -64,6 +64,7 @@ func (g *GmServer) RegisterComponents(ctx context.Context) {
 
 	if config.HasTraefik(g.Cfg) && g.Cfg.Traefik.Provider == "etcd" {
 		err := g.{{.serverName}}Router.AddRouters(ctx, traefik.NewTClient(), &traefik.RouterInfo{
+			Endpoints: g.Cfg.Etcd.Hosts,
 			Server: g.Cfg.Etcd.Key,
 			Paths:  g.{{.serverName}}Router.Paths,
 			Url:    g.Cfg.Http.HttpListenOn,

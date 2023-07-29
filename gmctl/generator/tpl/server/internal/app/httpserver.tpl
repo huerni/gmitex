@@ -33,7 +33,7 @@ func (h *HtServer) AddDialOps(opts ...grpc.DialOption) {
 
 func (h *HtServer) Start(ctx context.Context, RpcListenOn string, HttpListenOn string) error {
 	mux := runtime.NewServeMux(h.muxOps...)
-	err := user.RegisterUserHandlerFromEndpoint(ctx, mux, RpcListenOn, h.dialOps)
+	err := pb.Register{{.serverName}}HandlerFromEndpoint(ctx, mux, RpcListenOn, h.dialOps)
 	if err != nil {
 		return err
 	}

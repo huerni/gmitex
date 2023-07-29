@@ -28,10 +28,10 @@ func (g *GrpcServer) Start(c *config.Config) error {
 	options := append(g.options, unaryInterceptorOption, streamInterceptorOption)
 
 	ctx := svc.NewServiceContext(c)
-	srv := handler.NewUserServer(ctx)
+	srv := handler.New{{.serverName}}Server(ctx)
 	g.server = grpc.NewServer(options...)
 
-	user.RegisterUserServer(g.server, srv)
+	pb.Register{{.serverName}}Server(g.server, srv)
 
 	return g.server.Serve(lis)
 }
