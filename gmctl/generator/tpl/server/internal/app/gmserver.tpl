@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/signal"
 	{{.imports}}
-	"project1/pkg/etcd"
-	"project1/pkg/gw/traefik"
+	"github.com/huerni/gmitex/pkg/etcd"
+	"github.com/huerni/gmitex/pkg/gw/traefik"
 	"syscall"
 )
 

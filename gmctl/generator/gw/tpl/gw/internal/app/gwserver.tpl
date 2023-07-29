@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gateway/internal/config"
-	"gateway/pkg/etcd"
+	"github.com/huerni/gmitex/pkg/etcd"
 	"os"
 	"os/signal"
 	"syscall"
