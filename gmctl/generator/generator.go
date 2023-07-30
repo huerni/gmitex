@@ -31,8 +31,11 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
-	// TODO:检查工具是否安装完全
-	// err = g.Prepare()
+	//检查工具是否安装完全
+	err = g.Prepare()
+	if err != nil {
+		return err
+	}
 
 	p := parser.NewProtoParser()
 	proto, err := p.Parse(gctx.Src)
