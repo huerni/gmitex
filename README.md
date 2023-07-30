@@ -9,6 +9,11 @@ gmitex is a lightweight microservices framework designed for individuals to quic
 go 1.20  
 docker 24.0  
 
+# Install
+```shell
+go install github.com/huerni/gmitex/gmctl@latest
+```
+
 ## Quick Start
 ```shell
 #env check
