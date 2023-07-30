@@ -1,8 +1,8 @@
 package gw
 
 import (
+	"github.com/huerni/gmitex/gmctl/util"
 	"github.com/zeromicro/go-zero/tools/goctl/util/ctx"
-	"gmctl/util"
 	"path/filepath"
 	"strings"
 )

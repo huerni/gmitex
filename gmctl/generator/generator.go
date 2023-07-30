@@ -1,9 +1,9 @@
 package generator
 
 import (
+	"github.com/huerni/gmitex/gmctl/parser"
+	"github.com/huerni/gmitex/gmctl/util"
 	"github.com/zeromicro/go-zero/tools/goctl/util/ctx"
-	"gmctl/parser"
-	"gmctl/util"
 	"path/filepath"
 )
 

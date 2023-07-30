@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/huerni/gmitex/gmctl/envcheck"
 	"github.com/spf13/cobra"
-	"gmctl/envcheck"
 )
 
 // gmctl check

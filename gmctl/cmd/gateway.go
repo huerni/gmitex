@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/huerni/gmitex/gmctl/generator/gw"
+	"github.com/huerni/gmitex/gmctl/util"
 	"github.com/spf13/cobra"
-	"gmctl/generator/gw"
-	"gmctl/util"
 	"os"
 	"path/filepath"
 )

@@ -2,8 +2,8 @@ package generator
 
 import (
 	_ "embed"
+	"github.com/huerni/gmitex/gmctl/util"
 	utilx "github.com/zeromicro/go-zero/tools/goctl/util"
-	"gmctl/util"
 	"path/filepath"
 	"strings"
 )

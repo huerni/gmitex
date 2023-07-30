@@ -2,8 +2,8 @@ package envcheck
 
 import (
 	"fmt"
-	"gmctl/envcheck/protocgengrpcgateway"
-	"gmctl/util"
+	"github.com/huerni/gmitex/gmctl/envcheck/protocgengrpcgateway"
+	"github.com/huerni/gmitex/gmctl/util"
 	"os"
 	"path/filepath"
 	"strings"

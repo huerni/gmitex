@@ -3,8 +3,8 @@ package generator
 import (
 	_ "embed"
 	"fmt"
+	"github.com/huerni/gmitex/gmctl/parser"
 	"github.com/zeromicro/go-zero/tools/goctl/util"
-	"gmctl/parser"
 	"path/filepath"
 )
 
@@ -38,7 +38,7 @@ func (g *Generator) GenConfig(ctx DirContext, proto parser.Proto) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return util.With("config").GoFmt(true).Parse(configTemplate).SaveTo(map[string]any{}, fileName, false)
 
 }

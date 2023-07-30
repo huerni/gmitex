@@ -3,8 +3,8 @@ package generator
 import (
 	_ "embed"
 	"fmt"
+	"github.com/huerni/gmitex/gmctl/parser"
 	"github.com/zeromicro/go-zero/tools/goctl/util"
-	"gmctl/parser"
 	"path/filepath"
 	"strings"
 )
