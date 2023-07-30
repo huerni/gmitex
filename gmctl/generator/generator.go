@@ -115,5 +115,10 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
+	err = g.GenPb(dirCtx, gctx)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
