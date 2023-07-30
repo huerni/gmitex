@@ -1,7 +1,8 @@
 on: 
   release: 
     types: [created]
-    
+    tags:
+      - "gmctl/*"
 jobs:
   releases-matrix:
     name: Release gmctl binary
