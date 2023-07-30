@@ -17,7 +17,7 @@ services:
   Etcd:
     image: 'bitnami/etcd:latest'
     restart: always
-    container_name: project-etcd
+    container_name: {{.project}}-etcd
     environment:
       - "ALLOW_NONE_AUTHENTICATION=yes"
       - "ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379"
@@ -28,12 +28,12 @@ services:
   traefik:
     image: "traefik:latest"
     restart: always
-    container_name: project-traefik
+    container_name: {{.project}}-traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=false"
       - "--providers.etcd=true"
-      - "--providers.etcd.endpoints=project-etcd:2379"
+      - "--providers.etcd.endpoints={{.project}}-etcd:2379"
       - "--entrypoints.web.address=:80"
     ports:
       - "8090:80"

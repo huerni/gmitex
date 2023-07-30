@@ -6,7 +6,7 @@ key = "gateway"
 
 [mysql]
 username = "{{.project}}"
-password = ""
+password = "123456"
 address = "localhost:3306"
 database = "{{.project}}"
 other = "?charset=utf8&parseTime=True&loc=Local"
