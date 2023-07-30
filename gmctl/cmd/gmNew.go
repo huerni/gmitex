@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"gmctl/generator"
+	"gmctl/util"
+	"os"
 	"path/filepath"
 )
 
@@ -13,13 +15,17 @@ var newCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Create an initial microservice.",
 	Long:  `Create an initial microservice.`,
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.ExactArgs(1),
 	RunE:  gmNew,
 }
 
+var (
+	Out string
+	//ProjectName string
+)
+
 func gmNew(_ *cobra.Command, args []string) error {
 	servername := args[0]
-	outputDir := args[1]
 	ext := filepath.Ext(servername)
 	if len(ext) > 0 {
 		return fmt.Errorf("unexpected ext: %s", ext)
@@ -31,6 +37,17 @@ func gmNew(_ *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	outputDir, err := filepath.Abs(Out)
+	if err != nil {
+		return err
+	}
+	outputDir = filepath.Join(outputDir, servername)
+
+	err = util.MkdirIfNotExist(outputDir)
+	if err != nil {
+		return err
+	}
+
 	err = generator.GenProto(src)
 	if err != nil {
 		return err
@@ -52,4 +69,7 @@ func gmNew(_ *cobra.Command, args []string) error {
 func init() {
 	rootCmd.AddCommand(newCmd)
 	// 绑定flag  -name  -output
+	pwdDir, _ := os.Getwd()
+	newCmd.Flags().StringVarP(&Out, "out", "o", pwdDir, "server output dir")
+	newCmd.Flags().StringVarP(&ProjectName, "projectName", "p", "gmitex", "project name")
 }

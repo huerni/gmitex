@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	"gmctl/generator/gw"
 	"gmctl/util"
+	"os"
 	"path/filepath"
 )
 
@@ -14,19 +15,27 @@ var gatewayCmd = &cobra.Command{
 	Use:   "gateway",
 	Short: "Create gateway.",
 	Long:  `Create gateway`,
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.ExactArgs(0),
 	RunE:  gmGateway,
 }
 
+var (
+	GwOut       string
+	ProjectName string
+)
+
 func gmGateway(_ *cobra.Command, args []string) error {
-	projectName := args[0]
-	outputDir := args[1]
+	projectName := ProjectName
+	outputDir, err := filepath.Abs(Out)
+	if err != nil {
+		return err
+	}
 	ext := filepath.Ext(projectName)
 	if len(ext) > 0 {
 		return fmt.Errorf("unexpected ext: %s", ext)
 	}
 	gatewayoutput := fmt.Sprintf("%v/gateway", outputDir)
-	err := util.MkdirIfNotExist(gatewayoutput)
+	err = util.MkdirIfNotExist(gatewayoutput)
 	if err != nil {
 		return err
 	}
@@ -46,4 +55,7 @@ func gmGateway(_ *cobra.Command, args []string) error {
 func init() {
 	rootCmd.AddCommand(gatewayCmd)
 	// 绑定flag  -name  -output
+	pwdDir, _ := os.Getwd()
+	gatewayCmd.Flags().StringVarP(&GwOut, "out", "o", pwdDir, "gateway output dir")
+	gatewayCmd.Flags().StringVarP(&ProjectName, "projectName", "p", "gmitex", "project name")
 }
