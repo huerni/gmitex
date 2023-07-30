@@ -1,4 +1,4 @@
-module gmctl
+module github.com/huerni/gmitex/gmctl
 
 go 1.20
 
