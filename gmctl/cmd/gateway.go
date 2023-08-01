@@ -57,5 +57,5 @@ func init() {
 	// 绑定flag  -name  -output
 	pwdDir, _ := os.Getwd()
 	gatewayCmd.Flags().StringVarP(&GwOut, "out", "o", pwdDir, "gateway output dir")
-	gatewayCmd.Flags().StringVarP(&ProjectName, "projectName", "p", "gmitex", "project name")
+	gatewayCmd.Flags().StringVarP(&ProjectName, "project", "p", "gmitex", "belongs to the project")
 }

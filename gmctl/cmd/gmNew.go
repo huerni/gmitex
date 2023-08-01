@@ -54,6 +54,7 @@ func gmNew(_ *cobra.Command, args []string) error {
 	}
 
 	ctx := &generator.GmContext{
+		Op:     "new",
 		Src:    src,
 		Output: outputDir,
 	}
@@ -71,5 +72,5 @@ func init() {
 	// 绑定flag  -name  -output
 	pwdDir, _ := os.Getwd()
 	newCmd.Flags().StringVarP(&Out, "out", "o", pwdDir, "server output dir")
-	newCmd.Flags().StringVarP(&ProjectName, "projectName", "p", "gmitex", "project name")
+	newCmd.Flags().StringVarP(&ProjectName, "project", "p", "gmitex", "belongs to the project")
 }

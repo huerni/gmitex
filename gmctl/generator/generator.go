@@ -11,6 +11,7 @@ type Generator struct {
 }
 
 type GmContext struct {
+	Op       string
 	Src      string
 	Output   string
 	GoModule string
@@ -32,9 +33,11 @@ func (g *Generator) Generate(gctx *GmContext) error {
 	}
 
 	//检查工具是否安装完全
-	err = g.Prepare()
-	if err != nil {
-		return err
+	if gctx.Op == "new" {
+		err = g.Prepare()
+		if err != nil {
+			return err
+		}
 	}
 
 	p := parser.NewProtoParser()
@@ -42,11 +45,6 @@ func (g *Generator) Generate(gctx *GmContext) error {
 	if err != nil {
 		return err
 	}
-
-	//err = g.GenGoMod(gctx, abs)
-	//if err != nil {
-	//	return err
-	//}
 
 	projectCtx, err := ctx.Prepare(abs)
 	if err != nil {

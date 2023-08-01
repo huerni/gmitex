@@ -28,5 +28,5 @@ func (g *Generator) GenGmServer(ctx DirContext, proto parser.Proto) error {
 	return util.With("gmServer").GoFmt(true).Parse(gmServerTemplate).SaveTo(map[string]any{
 		"imports":    strings.Join(imports.KeysStr(), pathx.NL),
 		"serverName": parser.CamelCase(ctx.GetServerName()),
-	}, fileName, true)
+	}, fileName, false)
 }
