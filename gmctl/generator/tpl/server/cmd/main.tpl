@@ -11,7 +11,11 @@ func main() {
 		panic(err)
 	}
 
-	g := app.NewGmServer(c)
+	g := app.NewGmServer(c, {{.serverName}}.Register{{.serverName}}HandlerFromEndpoint, func(server *grpc.Server) {
+    		ctx := svc.NewServiceContext()
+    		srv := handler.New{{.serverName}}Server(ctx)
+    		{{.serverName}}.Register{{.serverName}}Server(server, srv)
+    })
 	g.Start(context.Background())
 	g.WaitForShutdown(context.Background())
 }
