@@ -22,9 +22,13 @@ func (g *Generator) GenMain(ctx DirContext, proto parser.Proto) error {
 	imports := collection.NewSet()
 	configImport := fmt.Sprintf(`"%v"`, ctx.GetConfig().Package)
 	appImport := fmt.Sprintf(`"%v"`, ctx.GetApp().Package)
-	imports.AddStr(configImport, appImport)
+	handlerImport := fmt.Sprintf(`"%s"`, ctx.GetHandler().Package)
+	svcImport := fmt.Sprintf(`"%s"`, ctx.GetSvc().Package)
+	pbImport := fmt.Sprintf(`%s %s`, ctx.GetServerName(), ctx.GetPb().Package)
+	imports.AddStr(configImport, appImport, handlerImport, svcImport, pbImport)
 
 	return util.With("main").GoFmt(true).Parse(mainTemplate).SaveTo(map[string]any{
-		"imports": strings.Join(imports.KeysStr(), pathx.NL),
+		"imports":    strings.Join(imports.KeysStr(), pathx.NL),
+		"serverName": parser.CamelCase(ctx.GetServerName()),
 	}, fileName, false)
 }

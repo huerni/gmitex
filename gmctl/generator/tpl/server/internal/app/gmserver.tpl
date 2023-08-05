@@ -3,29 +3,30 @@ package app
 import (
 	"context"
 	"fmt"
+	"github.com/huerni/gmitex/pkg/etcd"
 	"google.golang.org/grpc"
 	"net/http"
 	"os"
 	"os/signal"
 	{{.imports}}
-	"github.com/huerni/gmitex/pkg/etcd"
-	"github.com/huerni/gmitex/pkg/gw/traefik"
+	"github.com/huerni/gmitex/pkg/server/gs"
+	"github.com/huerni/gmitex/pkg/server/hs"
 	"syscall"
 )
 
 type GmServer struct {
-	RpcServer  *GrpcServer
-	HttpServer *HtServer
-	{{.serverName}}Router *router.{{.serverName}}Router
+	RpcServer  *gs.GrpcServer
+	HttpServer *hs.HtServer
+	{{.serverName}}Router *routers.{{.serverName}}Router
 	Cfg        *config.Config
 }
 
-func NewGmServer(c *config.Config) *GmServer {
+func NewGmServer(c *config.Config, registerHandler interface{}, registerFunc gs.RegisterFn) *GmServer {
 
 	return &GmServer{
-		RpcServer:  NewGrpcServer(),
-		HttpServer: NewHtServer(),
-		{{.serverName}}Router: router.New{{.serverName}}Router(),
+		RpcServer:  gs.NewGrpcServer(registerFunc),
+		HttpServer: hs.NewHtServer(registerHandler),
+		{{.serverName}}Router: routers.New{{.serverName}}Router(),
 		Cfg:        c,
 	}
 }
@@ -51,10 +52,10 @@ func (g *GmServer) Start(ctx context.Context) {
 }
 
 func (g *GmServer) RegisterComponents(ctx context.Context) {
-	if config.HasEtcd(g.Cfg) {
+	if g.Cfg.Etcd.HasConfig() {
 		err := etcd.PutWithInfo(context.Background(), g.Cfg.Etcd.Hosts, &etcd.ServerInfo{
-			ServerKey: g.Cfg.Etcd.Key,
-			Data:      map[string]string{"rpc": g.Cfg.Grpc.RpcListenOn, "http": g.Cfg.Http.HttpListenOn},
+			ServerKey: fmt.Sprintf("%v-%v", g.Cfg.Prefix, g.Cfg.Etcd.Key),
+			Data:      map[string]string{"rpc": g.Cfg.Grpc.RpcListenOn, "hs": g.Cfg.Http.HttpListenOn},
 		})
 
 		if err != nil {
@@ -62,12 +63,12 @@ func (g *GmServer) RegisterComponents(ctx context.Context) {
 		}
 	}
 
-	if config.HasTraefik(g.Cfg) && g.Cfg.Traefik.Provider == "etcd" {
+	if g.Cfg.Traefik.HasConfig() && g.Cfg.Traefik.Provider == "etcd" {
 		err := g.{{.serverName}}Router.AddRouters(ctx, traefik.NewTClient(), &traefik.RouterInfo{
 			Endpoints: g.Cfg.Etcd.Hosts,
-			Server: g.Cfg.Etcd.Key,
-			Paths:  g.{{.serverName}}Router.Paths,
-			Url:    g.Cfg.Http.HttpListenOn,
+			Server:    g.Cfg.Etcd.Key,
+			Paths:     g.{{.serverName}}Router.Paths,
+			Url:       g.Cfg.Http.HttpListenOn,
 		})
 
 		if err != nil {
@@ -75,16 +76,17 @@ func (g *GmServer) RegisterComponents(ctx context.Context) {
 		}
 	}
 
-	if config.HasMysql(g.Cfg) {
-		if config.HasMysql(g.Cfg) {
-			db.Init(g.Cfg)
+	if g.Cfg.Mysql.HasConfig() {
+		err := db.Init(g.Cfg)
+		if err != nil {
+			fmt.Println(err)
 		}
 	}
 
 }
 
 func (g *GmServer) startRpc() error {
-	err := g.RpcServer.Start(g.Cfg)
+	err := g.RpcServer.Start(g.Cfg.Grpc.RpcListenOn)
 	if err != nil {
 		return err
 	}
