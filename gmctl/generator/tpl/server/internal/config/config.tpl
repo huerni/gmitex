@@ -1,19 +1,18 @@
 package config
 
 import (
-	"fmt"
-	"github.com/duke-git/lancet/netutil"
 	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/huerni/gmitex/pkg/config"
 )
 
 type Config struct {
-	Prefix string   `json:"prefix"`
-	Grpc   RpcConf  `json:"grpc"`
-	Http   HttpConf `json:"http"`
+	Prefix string          `json:"prefix"`
+	Grpc   config.RpcConf  `json:"grpc"`
+	Http   config.HttpConf `json:"http"`
 
-	Etcd    EtcdConf    `json:"etcd,option"`
-	Mysql   MysqlConf   `json:"mysql,option"`
-	Traefik TraefikConf `json:"traefik,option"`
+	Etcd    config.EtcdConf    `json:"etcd,option"`
+	Mysql   config.MysqlConf   `json:"mysql,option"`
+	Traefik config.TraefikConf `json:"traefik,option"`
 }
 
 var (
@@ -38,40 +37,35 @@ func GetConfig() *Config {
 }
 
 func FigureConf(c *Config) error {
-	err := FigureIP(c)
+	err := c.Grpc.FigureConfig()
 	if err != nil {
 		return err
 	}
 
-	if HasMysql(c) {
-		err = FigureMysql(c)
+	err = c.Http.FigureConfig()
+	if err != nil {
+		return err
+	}
+
+	err = c.Etcd.FigureConfig()
+	if err != nil {
+		return err
+	}
+
+	err = c.Mysql.FigureConfig()
+	if err != nil {
+		return err
+	}
+	if c.Mysql.DSN == "" && c.Mysql.HasConfig() {
+		err := config.GetFigureFromEtcd(c.Prefix, c.Etcd.Hosts, &c.Mysql)
 		if err != nil {
 			return err
 		}
 	}
 
-	return nil
-}
-
-type RpcConf struct {
-	Name        string `json:"name"`
-	RpcListenOn string `json:"listenOn"`
-}
-
-type HttpConf struct {
-	HttpListenOn string `json:"listenOn"`
-}
-
-func FigureIP(c *Config) error {
-	ip := c.Grpc.RpcListenOn[:len(c.Grpc.RpcListenOn)-5]
-	if ip == "127.0.0.1" || ip == "localhost" || ip == "" {
-		c.Grpc.RpcListenOn = netutil.GetInternalIp() + ":" + c.Grpc.RpcListenOn[len(c.Grpc.RpcListenOn)-4:]
-		fmt.Println(c.Grpc.RpcListenOn)
-	}
-	ip = c.Http.HttpListenOn[:len(c.Http.HttpListenOn)-5]
-	if ip == "127.0.0.1" || ip == "localhost" || ip == "" {
-		c.Http.HttpListenOn = netutil.GetInternalIp() + ":" + c.Http.HttpListenOn[len(c.Http.HttpListenOn)-4:]
-		fmt.Println(c.Http.HttpListenOn)
+	err = c.Traefik.FigureConfig()
+	if err != nil {
+		return err
 	}
 
 	return nil

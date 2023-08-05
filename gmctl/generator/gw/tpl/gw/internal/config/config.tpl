@@ -1,15 +1,15 @@
 package config
 
 import (
-    "fmt"
+	"github.com/huerni/gmitex/pkg/config"
 	"github.com/zeromicro/go-zero/core/conf"
 )
 
 type Config struct {
 	Prefix string `json:"prefix"`
 
-	Etcd  EtcdConf  `json:"etcd,option"`
-	Mysql MysqlConf `json:"mysql,option"`
+	Etcd  config.EtcdConf  `json:"etcd,option"`
+	Mysql config.MysqlConf `json:"mysql,option"`
 }
 
 var (
@@ -34,53 +34,15 @@ func GetConfig() *Config {
 }
 
 func FigureConf(c *Config) error {
-	err := FigureMysql(c)
+	err := c.Etcd.FigureConfig()
+	if err != nil {
+		return err
+	}
+
+	err = c.Mysql.FigureConfig()
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-
-type EtcdConf struct {
-	Hosts []string `json:"hosts"`
-	Key   string   `json:"key"`
-}
-
-func HasEtcd(c *Config) bool {
-	if len(c.Etcd.Hosts) > 0 {
-		return true
-	}
-
-	return false
-}
-
-type MysqlConf struct {
-	Username string `json:"username,option"`
-	Password string `json:"password,option"`
-	Address  string `json:"address,option"`
-	Database string `json:"database,option"`
-	Other    string `json:"other,option"`
-	DSN      string `json:"dsn,option"`
-}
-
-func FigureMysql(c *Config) error {
-	if c.Mysql.DSN != "" {
-		return nil
-	}
-
-	if c.Mysql.Username != "" && c.Mysql.Password != "" && c.Mysql.Database != "" && c.Mysql.Address != "" {
-		c.Mysql.DSN = fmt.Sprintf("%v:%v@tcp(%v)/%v%v",
-			c.Mysql.Username, c.Mysql.Password, c.Mysql.Address, c.Mysql.Database, c.Mysql.Other)
-		return nil
-	}
-	return nil
-}
-
-func HasMysql(c *Config) bool {
-	if c.Mysql.DSN != "" {
-		return true
-	}
-	return false
 }
