@@ -28,7 +28,7 @@ func (g *GwServer) Start(ctx context.Context) {
 }
 
 func (g *GwServer) RegisterComponents(ctx context.Context) {
-	if config.HasEtcd(g.Cfg) {
+	if g.Cfg.Etcd.HasConfig() {
 		err := etcd.PutWithInfo(context.Background(), g.Cfg.Etcd.Hosts, &etcd.ServerInfo{
 			ServerKey: g.Cfg.Etcd.Key,
 			Data:      nil,
@@ -39,7 +39,7 @@ func (g *GwServer) RegisterComponents(ctx context.Context) {
 		}
 	}
 
-	if config.HasMysql(g.Cfg) {
+	if g.Cfg.Mysql.HasConfig() {
 		err := etcd.PutWithInfo(context.Background(), g.Cfg.Etcd.Hosts, &etcd.ServerInfo{
 			ServerKey: fmt.Sprintf("%s-%s", g.Cfg.Prefix, "mysql"),
 			Data:      map[string]string{"dsn": g.Cfg.Mysql.DSN},

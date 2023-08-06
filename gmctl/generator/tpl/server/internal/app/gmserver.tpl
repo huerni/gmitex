@@ -11,13 +11,14 @@ import (
 	{{.imports}}
 	"github.com/huerni/gmitex/pkg/server/gs"
 	"github.com/huerni/gmitex/pkg/server/hs"
+	"github.com/huerni/gmitex/pkg/gw/traefik"
 	"syscall"
 )
 
 type GmServer struct {
 	RpcServer  *gs.GrpcServer
 	HttpServer *hs.HtServer
-	{{.serverName}}Router *routers.{{.serverName}}Router
+	{{.serverName}}Router *router.{{.serverName}}Router
 	Cfg        *config.Config
 }
 
@@ -26,7 +27,7 @@ func NewGmServer(c *config.Config, registerHandler interface{}, registerFunc gs.
 	return &GmServer{
 		RpcServer:  gs.NewGrpcServer(registerFunc),
 		HttpServer: hs.NewHtServer(registerHandler),
-		{{.serverName}}Router: routers.New{{.serverName}}Router(),
+		{{.serverName}}Router: router.New{{.serverName}}Router(),
 		Cfg:        c,
 	}
 }

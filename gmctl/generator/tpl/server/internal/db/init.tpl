@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	{{.imports}}
@@ -9,13 +8,14 @@ import (
 
 var DB *gorm.DB
 
-func Init(c *config.Config) {
+func Init(c *config.Config) error {
 	var err error
 	DB, err = gorm.Open(mysql.Open(c.Mysql.DSN))
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 
 	// 根据结构自动建表
 
+    return nil
 }
