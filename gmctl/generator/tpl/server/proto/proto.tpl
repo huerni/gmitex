@@ -22,7 +22,7 @@ message PingResp {
 service {{.serverName}} {
       rpc Ping(PingReq) returns (PingResp) {
             option (google.api.http) = {
-                  get: "/api/v1.0/ping"
+                  get: "/api/v1/{{.serverName}}/ping"
             };
       };
 }
