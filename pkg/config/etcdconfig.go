@@ -1,8 +1,8 @@
 package config
 
 type EtcdConf struct {
-	Hosts []string `json:"hosts,option"`
-	Key   string   `json:"key,option"`
+	Hosts []string `json:"hosts,optional"`
+	Key   string   `json:"key,optional"`
 }
 
 func (c *EtcdConf) FigureConfig() error {
