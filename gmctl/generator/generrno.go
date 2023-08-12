@@ -19,11 +19,10 @@ func (g *Generator) GenErrno(ctx DirContext, proto parser.Proto) error {
 	fileName := filepath.Join(ctx.GetErrno().Filename, fmt.Sprintf("%v.go", errnoFileName))
 
 	imports := collection.NewSet()
-	pbImport := fmt.Sprintf(`"%v"`, ctx.GetPb().Package)
-	imports.AddStr(pbImport)
+	//	pbImport := fmt.Sprintf(`"%v"`, ctx.GetPb().Package)
+	//	imports.AddStr(pbImport)
 
 	return util.With("errno").GoFmt(true).Parse(errnoTemplate).SaveTo(map[string]any{
-		"imports":        strings.Join(imports.KeysStr(), pathx.NL),
-		"servicePackage": proto.PbPackage,
+		"imports": strings.Join(imports.KeysStr(), pathx.NL),
 	}, fileName, true)
 }
