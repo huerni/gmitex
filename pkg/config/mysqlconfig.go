@@ -22,7 +22,7 @@ func (c *MysqlConf) FigureConfig() error {
 	}
 
 	if c.Username != "" && c.Password != "" && c.Database != "" && c.Address != "" {
-		c.DSN = fmt.Sprintf("mysql://%v:%v@%v/%v%v", c.Username, c.Password, c.Address, c.Database, c.Other)
+		c.DSN = fmt.Sprintf("%v:%v@tcp(%v)/%v%v", c.Username, c.Password, c.Address, c.Database, c.Other)
 		return nil
 	}
 
