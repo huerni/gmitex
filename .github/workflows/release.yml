@@ -21,6 +21,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
-          goversion: "https://mirrors.aliyun.com/golang/go1.20.4.linux-amd64.tar.gz"
+          goversion: "https://mirrors.aliyun.com/golang/go1.20.5.linux-amd64.tar.gz"
           project_path: "gmctl"
           binary_name: "gmctl"
