@@ -1,7 +1,7 @@
 package config
 
 type TraefikConf struct {
-	Provider string `json:"provider,option"`
+	Provider string `json:"provider,optional"`
 }
 
 func (c *TraefikConf) FigureConfig() error {
