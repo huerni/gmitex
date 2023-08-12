@@ -1,8 +1,6 @@
 on: 
   release: 
     types: [created]
-    tags:
-      - "gmctl/*"
 jobs:
   releases-matrix:
     name: Release gmctl binary
@@ -18,7 +16,7 @@ jobs:
             goos: darwin
     steps:
       - uses: actions/checkout@v3
-      - uses: zeromicro/go-zero-release-action@master
+      - uses: wangyoucao577/go-release-action@v1.28
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
