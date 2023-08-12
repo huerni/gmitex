@@ -31,10 +31,10 @@ func (g *Generator) genHandlerInCompatibility(ctx DirContext, proto parser.Proto
 
 	imports := collection.NewSet()
 	serviceImport := fmt.Sprintf(`"%v"`, ctx.GetService().Package)
-	errnoImport := fmt.Sprintf(`"%v"`, ctx.GetErrno().Package)
+	//errnoImport := fmt.Sprintf(`"%v"`, ctx.GetErrno().Package)
 	pbImport := fmt.Sprintf(`"%v"`, ctx.GetPb().Package)
 	svcImport := fmt.Sprintf(`"%v"`, ctx.GetSvc().Package)
-	imports.AddStr(serviceImport, errnoImport, pbImport, svcImport)
+	imports.AddStr(serviceImport, pbImport, svcImport)
 	funcList, err := g.genFunctions(proto.PbPackage, service)
 	if err != nil {
 		return err
