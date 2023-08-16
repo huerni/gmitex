@@ -38,9 +38,8 @@ func (g *Generator) GenRouter(ctx DirContext, proto parser.Proto) error {
 		importPaths.AddStr(importPath)
 	}
 
-	authPathPrefixes := GetUrlPrefixes(auth_paths)
 	importAuthPaths := collection.NewSet()
-	for _, path := range authPathPrefixes {
+	for _, path := range auth_paths {
 		importPath := fmt.Sprintf(`authPaths = append(authPaths, "%s")`, path)
 		importAuthPaths.AddStr(importPath)
 	}
