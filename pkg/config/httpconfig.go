@@ -6,7 +6,7 @@ import (
 )
 
 type HttpConf struct {
-	HttpListenOn string `json:"listenOn,option"`
+	HttpListenOn string `json:"listenOn,optional"`
 }
 
 func (c *HttpConf) FigureConfig() error {

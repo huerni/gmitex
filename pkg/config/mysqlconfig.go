@@ -7,13 +7,13 @@ import (
 )
 
 type MysqlConf struct {
-	Key      string `json:"key,option"`
-	Username string `json:"username,option"`
-	Password string `json:"password,option"`
-	Address  string `json:"address,option"`
-	Database string `json:"database,option"`
-	Other    string `json:"other,option"`
-	DSN      string `json:"dsn,option"`
+	Key      string `json:"key,optional"`
+	Username string `json:"username,optional"`
+	Password string `json:"password,optional"`
+	Address  string `json:"address,optional"`
+	Database string `json:"database,optional"`
+	Other    string `json:"other,optional"`
+	DSN      string `json:"dsn,optional"`
 }
 
 func (c *MysqlConf) FigureConfig() error {

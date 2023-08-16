@@ -27,6 +27,15 @@ func ConvertErrNo(errno ErrNo) error {
 	return status.Error(errno.ErrCode, errno.ErrMsg)
 }
 
+func Err(code int, msg string) error {
+	err := ErrNo{
+		ErrCode: codes.Code(code),
+		ErrMsg:  msg,
+	}
+
+	return status.Error(err.ErrCode, err.ErrMsg)
+}
+
 func ConvertErr(err error) error {
 	Err := ErrNo{}
 	if errors.As(err, &Err) {
