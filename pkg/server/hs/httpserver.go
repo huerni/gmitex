@@ -8,15 +8,19 @@ import (
 	"net/http"
 )
 
+type Middleware func(http.Handler) http.Handler
+
 type HtServer struct {
 	server          *http.Server
 	registerHandler interface{}
 	muxOps          []runtime.ServeMuxOption
 	dialOps         []grpc.DialOption
+	middlewares     map[string][]Middleware
 }
 
 func NewHtServer(registerHandler interface{}) *HtServer {
-	return &HtServer{registerHandler: registerHandler}
+	mws := map[string][]Middleware{"/": make([]Middleware, 0)}
+	return &HtServer{registerHandler: registerHandler, middlewares: mws}
 }
 
 func (h *HtServer) AddMuxOp(opts ...runtime.ServeMuxOption) {
@@ -42,19 +46,33 @@ func (h *HtServer) Start(ctx context.Context, RpcListenOn string, HttpListenOn s
 	default:
 		return fmt.Errorf("unsupported function signature for registerHandler")
 	}
-	//err := user.RegisterUserHandlerFromEndpoint(ctx, mux, RpcListenOn, h.dialOps)
-	//if err != nil {
-	//	return err
-	//}
 
 	httpmux := http.NewServeMux()
-	httpmux.Handle("/", mux)
+	h.applyMws(httpmux, mux)
 	h.server = &http.Server{
 		Addr:    HttpListenOn,
 		Handler: httpmux,
 	}
 
 	return h.server.ListenAndServe()
+}
+
+func (h *HtServer) AddMws(pattern string, middlewares ...Middleware) {
+	_, ok := h.middlewares[pattern]
+	if !ok {
+		h.middlewares[pattern] = make([]Middleware, 0)
+	}
+	h.middlewares[pattern] = append(h.middlewares[pattern], middlewares...)
+}
+
+func (h *HtServer) applyMws(httpmux *http.ServeMux, mux *runtime.ServeMux) {
+	for pattern, mws := range h.middlewares {
+		var handler http.Handler = mux
+		for i := len(mws) - 1; i >= 0; i-- {
+			handler = mws[i](handler)
+		}
+		httpmux.Handle(pattern, handler)
+	}
 }
 
 func (h *HtServer) Stop(ctx context.Context) error {
