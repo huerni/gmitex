@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/duke-git/lancet v1.4.0
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
 	go.etcd.io/etcd/api/v3 v3.5.9
 	go.etcd.io/etcd/client/v3 v3.5.9
