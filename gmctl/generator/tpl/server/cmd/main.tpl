@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
-	"google.golang.org/grpc"
+    "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+    "github.com/huerni/gmitex/pkg/http/handlers"
+    "github.com/huerni/gmitex/pkg/http/response"
+    "google.golang.org/grpc"
+    "google.golang.org/protobuf/encoding/protojson"
     {{.imports}}
 )
 
@@ -17,6 +21,18 @@ func main() {
     		srv := handler.New{{.serverName}}Server(ctx)
     		{{.mserverName}}.Register{{.serverName}}Server(server, srv)
     })
+
+    g.HttpServer.AddMuxOp(
+    		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.HTTPBodyMarshaler{
+    			Marshaler: &response.CustomMarshaler{
+    				M: &runtime.JSONPb{
+    					MarshalOptions:   protojson.MarshalOptions{},
+    					UnmarshalOptions: protojson.UnmarshalOptions{},
+    				}}}),
+    		runtime.WithErrorHandler(handlers.ErrorHandler),
+    	)
+
+
 	g.Start(context.Background())
 	g.WaitForShutdown(context.Background())
 }
