@@ -33,3 +33,14 @@ go mod tidy
 go run cmd/main.go
 ```
 
+## 使用jwt
+```shell
+# 在需要认证的路径上标注:auth
+// :auth
+rpc Ping(PingReq) returns (PingResp) {
+            option (google.api.http) = {
+                  get: "/api/v1/ping"
+            };
+      };
+```
+
