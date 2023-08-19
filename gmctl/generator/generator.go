@@ -11,10 +11,11 @@ type Generator struct {
 }
 
 type GmContext struct {
-	Op       string
-	Src      string
-	Output   string
-	GoModule string
+	Op          string
+	Src         string
+	Output      string
+	GoModule    string
+	ProjectName string
 }
 
 func NewGenerator() *Generator {
@@ -93,7 +94,7 @@ func (g *Generator) Generate(gctx *GmContext) error {
 		return err
 	}
 
-	err = g.GenCfg(dirCtx, proto)
+	err = g.GenCfg(dirCtx, proto, gctx)
 	if err != nil {
 		return err
 	}
