@@ -67,5 +67,5 @@ func init() {
 	rootCmd.AddCommand(updateCmd)
 	// 绑定flag  -name  -output
 	pwdDir, _ := os.Getwd()
-	newCmd.Flags().StringVarP(&ProtoSrc, "src", "s", filepath.Join(pwdDir, "proto"), "proto src")
+	updateCmd.Flags().StringVarP(&ProtoSrc, "src", "s", filepath.Join(pwdDir, "proto"), "proto src")
 }

@@ -54,9 +54,10 @@ func gmNew(_ *cobra.Command, args []string) error {
 	}
 
 	ctx := &generator.GmContext{
-		Op:     "new",
-		Src:    src,
-		Output: outputDir,
+		Op:          "new",
+		Src:         src,
+		Output:      outputDir,
+		ProjectName: ProjectName,
 	}
 	g := generator.NewGenerator()
 	err = g.Generate(ctx)

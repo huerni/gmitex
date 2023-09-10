@@ -22,9 +22,13 @@ func (g *Generator) GenRouter(ctx DirContext, proto parser.Proto) error {
 	serverFile := filepath.Join(dir.Filename, serverFileName+".go")
 	importPaths := collection.NewSet()
 	paths := make([]string, 0)
+	auth_paths := make([]string, 0)
 	for _, rpc := range service.RPC {
 		path := rpc.RPC.Options[0].AggregatedConstants[0].Literal.Source
 		paths = append(paths, path)
+		if strings.Contains(parser.GetComment(rpc.Doc()), ":auth") {
+			auth_paths = append(auth_paths, path)
+		}
 	}
 
 	pathPrefixes := GetUrlPrefixes(paths)
@@ -34,9 +38,16 @@ func (g *Generator) GenRouter(ctx DirContext, proto parser.Proto) error {
 		importPaths.AddStr(importPath)
 	}
 
+	importAuthPaths := collection.NewSet()
+	for _, path := range auth_paths {
+		importPath := fmt.Sprintf(`authPaths = append(authPaths, "%s")`, path)
+		importAuthPaths.AddStr(importPath)
+	}
+
 	return util.With("router").GoFmt(true).Parse(RouterTemplate).SaveTo(map[string]any{
-		"serverName":  stringx.From(service.Name).ToCamel(),
-		"importPaths": strings.Join(importPaths.KeysStr(), pathx.NL),
+		"serverName":      stringx.From(service.Name).ToCamel(),
+		"importPaths":     strings.Join(importPaths.KeysStr(), pathx.NL),
+		"importAuthPaths": strings.Join(importAuthPaths.KeysStr(), pathx.NL),
 	}, serverFile, true)
 }
 
