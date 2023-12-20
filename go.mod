@@ -6,6 +6,8 @@ require (
 	github.com/duke-git/lancet v1.4.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
+	github.com/sirupsen/logrus v1.9.3
+	github.com/wisrc/gateway v0.0.0-20200512154127-33eea85147a1
 	go.etcd.io/etcd/api/v3 v3.5.9
 	go.etcd.io/etcd/client/v3 v3.5.9
 	google.golang.org/grpc v1.55.0

@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/huerni/gmitex/pkg/errno"
+	"github.com/huerni/gmitex/core/errno"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
 	"io"
