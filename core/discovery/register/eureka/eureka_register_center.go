@@ -17,12 +17,12 @@ type eurekaRegister struct {
 	register *register.ApplicationRegisterCenter
 }
 
-func NewEurekaRegister() *register.ApplicationRegisterCenter {
+func NewEurekaRegister(conf *config.RegisterCenter) *register.ApplicationRegisterCenter {
 	reg := register.NewApplicationRegisterCenter()
 	r := &eurekaRegister{
 		register: reg,
 	}
-	r.enableEurekaClient()
+	r.enableEurekaClient(conf)
 	return reg
 }
 
@@ -51,8 +51,7 @@ type eurekaApps struct {
 	} `json:"applications"`
 }
 
-func (r *eurekaRegister) enableEurekaClient() {
-	conf := config.GetRegisterCenter()
+func (r *eurekaRegister) enableEurekaClient(conf *config.RegisterCenter) {
 	eurekaRefresh := time.NewTicker(time.Second * conf.RefreshFrequency)
 	go func(tick *time.Ticker) {
 		defer tick.Stop()

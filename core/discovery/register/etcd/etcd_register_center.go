@@ -17,17 +17,16 @@ type etcdRegister struct {
 	register *register.ApplicationRegisterCenter
 }
 
-func NewEtcdRegister() *register.ApplicationRegisterCenter {
+func NewEtcdRegister(conf *config.RegisterCenter) *register.ApplicationRegisterCenter {
 	reg := register.NewApplicationRegisterCenter()
 	r := &etcdRegister{
 		register: reg,
 	}
-	r.enableEtcdClient()
+	r.enableEtcdClient(conf)
 	return reg
 }
 
-func (r *etcdRegister) enableEtcdClient() {
-	conf := config.GetRegisterCenter()
+func (r *etcdRegister) enableEtcdClient(conf *config.RegisterCenter) {
 	etcdRefresh := time.NewTicker(time.Second * conf.RefreshFrequency)
 
 	cli, err := clientv3.New(clientv3.Config{

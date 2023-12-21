@@ -18,12 +18,12 @@ var clientDiscovery = &Discovery{
 	lock: &sync.RWMutex{},
 }
 
-func EnableDiscovery(conf config.RegisterCenter) {
+func EnableDiscovery(conf *config.RegisterCenter) {
 	var er *register.ApplicationRegisterCenter
 	if conf.EurekaConfig.ServiceUrls != nil {
-		er = eureka.NewEurekaRegister()
+		er = eureka.NewEurekaRegister(conf)
 	} else if conf.EtcdConfig.Endpoints != nil {
-		er = etcd.NewEtcdRegister()
+		er = etcd.NewEtcdRegister(conf)
 	}
 
 	clientDiscovery.lock.Lock()
