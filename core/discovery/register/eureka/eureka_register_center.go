@@ -18,7 +18,7 @@ type eurekaRegister struct {
 }
 
 func NewEurekaRegister(conf *config.RegisterCenter) *register.ApplicationRegisterCenter {
-	reg := register.NewApplicationRegisterCenter()
+	reg := register.NewApplicationRegisterCenter(conf)
 	r := &eurekaRegister{
 		register: reg,
 	}

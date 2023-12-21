@@ -1,8 +1,8 @@
 package register
 
 import (
-	"github.com/wisrc/gateway/config"
-	"github.com/wisrc/gateway/logger"
+	"github.com/huerni/gmitex/core/gateway/config"
+	"github.com/huerni/gmitex/core/logger"
 	"strings"
 	"sync"
 	"time"
@@ -37,12 +37,12 @@ type ApplicationRegisterCenter struct {
 	Lock     *sync.RWMutex
 }
 
-func NewApplicationRegisterCenter() *ApplicationRegisterCenter {
+func NewApplicationRegisterCenter(conf *config.RegisterCenter) *ApplicationRegisterCenter {
 	r := &ApplicationRegisterCenter{
 		Services: make(map[string]*AppService),
 		Lock:     &sync.RWMutex{},
 	}
-	go r.refresh()
+	go r.refresh(conf)
 	return r
 }
 
@@ -53,8 +53,8 @@ func (r *ApplicationRegisterCenter) UpdateApplication(app *AppService) {
 	r.Services[strings.ToUpper(app.ServiceId)] = app
 }
 
-func (r *ApplicationRegisterCenter) refresh() {
-	registerCenter := config.GetRegisterCenter()
+func (r *ApplicationRegisterCenter) refresh(conf *config.RegisterCenter) {
+	registerCenter := conf
 	ticker := time.NewTicker(time.Second * registerCenter.RefreshFrequency)
 	go func(ticker *time.Ticker) {
 		for {
