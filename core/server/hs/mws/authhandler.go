@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/huerni/gmitex/pkg/jwtToken"
+	"github.com/huerni/gmitex/core/jwtToken"
 	"google.golang.org/grpc/grpclog"
 	"net/http"
 )
