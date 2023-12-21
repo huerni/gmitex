@@ -18,8 +18,7 @@ var clientDiscovery = &Discovery{
 	lock: &sync.RWMutex{},
 }
 
-func EnableDiscovery() {
-	conf := config.GetRegisterCenter()
+func EnableDiscovery(conf config.RegisterCenter) {
 	var er *register.ApplicationRegisterCenter
 	if conf.EurekaConfig.ServiceUrls != nil {
 		er = eureka.NewEurekaRegister()

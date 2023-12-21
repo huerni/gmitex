@@ -12,10 +12,14 @@ import (
 )
 
 type GatewayProxy struct {
+	GatewayRouterConfig *config.Routers
 }
 
-func NewGatewayProxy() *GatewayProxy {
-	return &GatewayProxy{}
+func NewGatewayProxy(routers *config.Routers) *GatewayProxy {
+	router.Init(routers)
+	return &GatewayProxy{
+		GatewayRouterConfig: routers,
+	}
 }
 
 // dispatch API 请求分发
@@ -121,7 +125,7 @@ func (r *GatewayProxy) globalRecover(ctx *context.GatewayContext, errMsg interfa
 
 // filterSensitiveHeaders 过滤掉请求 Header 中配置的 Key
 func (r *GatewayProxy) filterSensitiveHeaders(req *http.Request) {
-	for _, header := range config.GetGatewayRouter().SensitiveHeaders {
+	for _, header := range r.GatewayRouterConfig.SensitiveHeaders {
 		req.Header.Del(header)
 	}
 }

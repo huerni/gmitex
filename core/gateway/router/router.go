@@ -116,9 +116,9 @@ func match(path string) *Router {
 	return nil
 }
 
-func init() {
+func Init(routers *config.Routers) {
 
-	routerConfig := config.GetGatewayRouter()
+	routerConfig := routers
 
 	for _, v := range routerConfig.Routers {
 

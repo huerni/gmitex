@@ -17,8 +17,7 @@ type APIGatewayServer struct {
 }
 
 // NewAPIGatewayServer 创建 API Gateway 服务对象
-func NewAPIGatewayServer() *APIGatewayServer {
-	conf := config.GetServerConfig()
+func NewAPIGatewayServer(conf *config.ServerConfig) *APIGatewayServer {
 	return &APIGatewayServer{
 		timeout:     time.Second * conf.Timeout,
 		host:        conf.Host,
@@ -29,8 +28,8 @@ func NewAPIGatewayServer() *APIGatewayServer {
 
 // Start 启动 API 服务
 // 所有的请求都会经过此处进行分发
-func (r *APIGatewayServer) Start() {
-	gatewayProxy := NewGatewayProxy()
+func (r *APIGatewayServer) Start(routers *config.Routers) {
+	gatewayProxy := NewGatewayProxy(routers)
 	http.HandleFunc(r.contextPath, gatewayProxy.dispatch)
 	//http.Handle("/favicon.ico", http.FileServer(http.Dir("static")))
 
