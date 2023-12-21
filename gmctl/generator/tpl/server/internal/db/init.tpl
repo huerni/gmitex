@@ -1,21 +1,22 @@
 package db
 
 import (
+	"github.com/huerni/gmitex/core/logger"
+	"gmitest/internal/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	{{.imports}}
 )
 
 var DB *gorm.DB
 
-func Init(c *config.Config) error {
+func init() {
 	var err error
-	DB, err = gorm.Open(mysql.Open(c.Mysql.DSN))
-	if err != nil {
-		return err
+	mysqlConfig := config.Cfg.Mysql
+	if mysqlConfig.HasConfig() {
+		DB, err = gorm.Open(mysql.Open(mysqlConfig.DSN))
+		if err != nil {
+			logger.Error("mysql初始化失败: ", err)
+		}
+		logger.Info("Mysql初始化完成")
 	}
-
-	// 根据结构自动建表
-
-    return nil
 }

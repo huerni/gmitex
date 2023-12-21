@@ -1,7 +1,7 @@
 package gs
 
 import (
-	"fmt"
+	"github.com/huerni/gmitex/core/logger"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -51,6 +51,6 @@ func (g *GrpcServer) AddUnaryInterceptors(interceptors ...grpc.UnaryServerInterc
 
 func (g *GrpcServer) Stop() error {
 	g.server.GracefulStop()
-	fmt.Println("stop rpc server...")
+	logger.Info("stop rpc server...")
 	return nil
 }

@@ -2,7 +2,6 @@ package etcd
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/duke-git/lancet/netutil"
 	"go.etcd.io/etcd/client/v3"
@@ -44,29 +43,29 @@ func NewEtcdRegistry(endpoints []string) (*etcdRegistry, error) {
 	}, nil
 }
 
-func (e *etcdRegistry) RegisterWithInfo(info *ServerInfo) error {
-	leaseID, err := e.grantLease()
-
-	if err != nil {
-		return err
-	}
-	val, err := json.Marshal(info)
-	if err != nil {
-		return err
-	}
-	if err := e.register(info.ServerKey, string(val), leaseID); err != nil {
-		return err
-	}
-	meta := registerMeta{
-		leaseID: leaseID,
-	}
-	meta.ctx, meta.cancel = context.WithCancel(context.Background())
-	if err := e.keepalive(&meta); err != nil {
-		return err
-	}
-	e.meta = &meta
-	return nil
-}
+//func (e *etcdRegistry) RegisterWithInfo(info *AppInstance) error {
+//	leaseID, err := e.grantLease()
+//
+//	if err != nil {
+//		return err
+//	}
+//	val, err := json.Marshal(info)
+//	if err != nil {
+//		return err
+//	}
+//	if err := e.register(info.ServerKey, string(val), leaseID); err != nil {
+//		return err
+//	}
+//	meta := registerMeta{
+//		leaseID: leaseID,
+//	}
+//	meta.ctx, meta.cancel = context.WithCancel(context.Background())
+//	if err := e.keepalive(&meta); err != nil {
+//		return err
+//	}
+//	e.meta = &meta
+//	return nil
+//}
 
 func (e *etcdRegistry) RegisterWithKV(key string, val string) error {
 	leaseID, err := e.grantLease()

@@ -2,7 +2,7 @@ package router
 
 import (
 	"context"
-	"github.com/huerni/gmitex/pkg/gw"
+	"github.com/huerni/gmitex/core/gw"
 )
 
 type {{.serverName}}Router struct {

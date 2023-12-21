@@ -1,8 +1,9 @@
 package config
 
 import (
+	"github.com/huerni/gmitex/core/config"
+	"github.com/huerni/gmitex/core/logger"
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/huerni/gmitex/pkg/config"
 )
 
 type Config struct {
@@ -10,30 +11,25 @@ type Config struct {
 	Grpc   config.RpcConf  `json:"grpc"`
 	Http   config.HttpConf `json:"http"`
 
-	Etcd    config.EtcdConf    `json:"etcd,option"`
-	Mysql   config.MysqlConf   `json:"mysql,option"`
-	Traefik config.TraefikConf `json:"traefik,option"`
+	Etcd  config.EtcdConf  `json:"etcd,option"`
+	Mysql config.MysqlConf `json:"mysql,option"`
 }
 
 var (
-	Cfg *Config
+	Cfg = &Config{}
 )
 
-func InitConfig(filePath string) (*Config, error) {
-	if Cfg == nil {
-		Cfg = &Config{}
-		conf.MustLoad(filePath, Cfg)
-		err := FigureConf(Cfg)
-		if err != nil {
-			return nil, err
-		}
+func init() {
+	filePath := "etc/cfg.toml"
+	err := conf.Load(filePath, Cfg)
+	if err != nil {
+		logger.Fatal("配置信息读取失败: ", err)
 	}
-
-	return Cfg, nil
-}
-
-func GetConfig() *Config {
-	return Cfg
+	err = FigureConf(Cfg)
+	if err != nil {
+		logger.Fatal("配置信息初始化失败: ", err)
+	}
+	logger.Info("配置信息初始化完成")
 }
 
 func FigureConf(c *Config) error {
@@ -61,11 +57,6 @@ func FigureConf(c *Config) error {
 		if err != nil {
 			return err
 		}
-	}
-
-	err = c.Traefik.FigureConfig()
-	if err != nil {
-		return err
 	}
 
 	return nil

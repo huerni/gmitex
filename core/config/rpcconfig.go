@@ -1,26 +1,25 @@
 package config
 
 import (
-	"fmt"
 	"github.com/duke-git/lancet/netutil"
 )
 
 type RpcConf struct {
-	Name        string `json:"name"`
-	RpcListenOn string `json:"listenOn"`
+	Name string `json:"name"`
+	Addr string `json:"addr"`
+	Port int    `json:"port"`
 }
 
 func (c *RpcConf) FigureConfig() error {
-	ip := c.RpcListenOn[:len(c.RpcListenOn)-5]
+	ip := c.Addr
 	if ip == "127.0.0.1" || ip == "localhost" || ip == "" {
-		c.RpcListenOn = netutil.GetInternalIp() + ":" + c.RpcListenOn[len(c.RpcListenOn)-4:]
-		fmt.Println(c.RpcListenOn)
+		c.Addr = netutil.GetInternalIp()
 	}
 	return nil
 }
 
 func (c *RpcConf) HasConfig() bool {
-	if len(c.Name) == 0 || len(c.RpcListenOn) == 0 {
+	if len(c.Name) == 0 || len(c.Addr) == 0 {
 		return false
 	}
 	return true

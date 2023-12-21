@@ -1,26 +1,25 @@
 package config
 
 import (
-	"fmt"
 	"github.com/duke-git/lancet/netutil"
 )
 
 type HttpConf struct {
-	HttpListenOn string `json:"listenOn,optional"`
+	Addr string `json:"Addr,optional"`
+	Port int    `json:"Port,optional"`
 }
 
 func (c *HttpConf) FigureConfig() error {
-	ip := c.HttpListenOn[:len(c.HttpListenOn)-5]
+	ip := c.Addr
 	if ip == "127.0.0.1" || ip == "localhost" || ip == "" {
-		c.HttpListenOn = netutil.GetInternalIp() + ":" + c.HttpListenOn[len(c.HttpListenOn)-4:]
-		fmt.Println(c.HttpListenOn)
+		c.Addr = netutil.GetInternalIp()
 	}
 
 	return nil
 }
 
 func (c *HttpConf) HasConfig() bool {
-	if len(c.HttpListenOn) == 0 {
+	if len(c.Addr) == 0 {
 		return false
 	}
 	return true
