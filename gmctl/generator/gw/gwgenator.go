@@ -57,10 +57,5 @@ func (g *GwGenerator) Generate(gctx *GwContext) error {
 		return err
 	}
 
-	err = g.GenGwServer(dirCtx, gctx)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }

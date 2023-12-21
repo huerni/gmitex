@@ -25,17 +25,3 @@ services:
       - "2379:2379"
       - "2380:2380"
 
-  traefik:
-    image: "traefik:latest"
-    restart: always
-    container_name: {{.project}}-traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=false"
-      - "--providers.etcd=true"
-      - "--providers.etcd.endpoints={{.project}}-etcd:2379"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "8090:80"
-      - "9090:8080"
-
